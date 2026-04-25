@@ -27,11 +27,3 @@ Berdasarkan hasil pengujian fungsionalitas dan desain pada Daily Project 7:
 | **Security** | Menguji proteksi halaman (Auth Guard) dan hak akses Admin. | Pengguna tanpa login tidak bisa mengakses workspace; fitur admin terproteksi. | ✅ PASS |
 | **Performance** | Menguji kecepatan pemuatan data dan responsivitas aplikasi. | Aplikasi berjalan ringan dengan transisi antar halaman yang mulus. | ✅ PASS |
 
-## ⚙️ Cara Menjalankan Secara Lokal
-1. Clone repository ini.
-2. Konfigurasi database MySQL pada file `.env` di folder backend.
-3. Jalankan Backend: `cd backend && npm install && node server.js`.
-4. Jalankan Frontend: `cd frontend && npm install && npm run dev`.
-
----
-*Proyek ini dikembangkan untuk memenuhi tugas Daily Project 7 - Rekayasa Kebutuhan.*
