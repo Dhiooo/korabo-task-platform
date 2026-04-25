@@ -1,9 +1,11 @@
-const BASE_URL = 'http://localhost:5000/api';
+
+const BASE_URL = window.location.origin + '/api';
 
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
+
     toast.innerHTML = `
         <span style="font-size: 1.2rem;">${type === 'success' ? '✅' : '❌'}</span>
         <span>${message}</span>
@@ -61,7 +63,7 @@ function navigate(view, params = {}) {
 
     const tpl = document.getElementById(`tpl-${view}`);
     if (!tpl) return;
-    
+
     mainContent.innerHTML = '';
     mainContent.appendChild(tpl.content.cloneNode(true));
 
@@ -226,13 +228,19 @@ window.leaveGroup = async (id) => {
 
 window.goKanban = (id, name, code) => navigate('kanban', { groupId: id, groupName: name, groupCode: code });
 
+window.openCreateGroup = () => openCreateGroupModal();
+window.closeCreateGroup = () => closeModal();
+window.openJoinGroup = () => openJoinGroupModal();
+window.closeJoinGroup = () => closeModal();
+
+
 // Kanban Logics
 async function initKanban(groupId, params = {}) {
     document.getElementById('back-dash').onclick = () => navigate('dashboard');
-    
+
     const nameEl = document.getElementById('group-name-display');
     const codeEl = document.getElementById('group-code-display');
-    
+
     if (params.groupName) {
         nameEl.textContent = params.groupName;
         codeEl.textContent = `Kode Grup: ${params.groupCode}`;
@@ -247,7 +255,7 @@ async function initKanban(groupId, params = {}) {
 
     const tasks = await apiCall(`/tasks/${groupId}`);
     const members = await apiCall(`/groups/${groupId}/members`);
-    
+
     renderAssignmentView(tasks, members, groupId);
     renderMembersSidebar(members, groupId);
 
@@ -268,7 +276,7 @@ window.openAddTaskModal = async (groupId) => {
     const members = await apiCall(`/groups/${groupId}/members`);
     const tpl = document.getElementById('tpl-modal-add-task');
     const container = document.getElementById('modal-container');
-    
+
     container.innerHTML = '';
     container.appendChild(tpl.content.cloneNode(true));
     container.classList.remove('hidden');
@@ -321,9 +329,9 @@ function renderMembersSidebar(members, groupId) {
 function formatDateFull(dateStr) {
     if (!dateStr) return 'Tidak ada deadline';
     const d = new Date(dateStr);
-    return d.toLocaleDateString('id-ID', { 
-        day: 'numeric', 
-        month: 'long', 
+    return d.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
@@ -380,7 +388,7 @@ function renderAssignmentView(tasks, members, groupId) {
         const userTasks = tasks.filter(t => t.assigned_to === member.id);
         const item = document.createElement('div');
         item.className = 'accordion-item mt-md';
-        
+
         const sections = [
             { id: 0, label: 'Not Started', class: 'notstarted' },
             { id: 1, label: 'In Progress', class: 'inprogress' },
@@ -400,9 +408,9 @@ function renderAssignmentView(tasks, members, groupId) {
                     </div>
                     <div class="status-accordion-content" onclick="event.stopPropagation()">
                         ${tks.length === 0 ? '<p class="text-muted" style="font-size: 0.8rem">Kosong</p>' : tks.map(t => {
-                            const isOwner = currentUser.id == member.id;
-                            const isOwnerOrAdmin = isOwner || isAdmin;
-                            return `
+                const isOwner = currentUser.id == member.id;
+                const isOwnerOrAdmin = isOwner || isAdmin;
+                return `
                             <div style="border-bottom: 1px solid rgba(255,219,187,0.05);">
                                 <div class="task-assign-row">
                                     <div class="d-flex flex-column">
@@ -432,7 +440,7 @@ function renderAssignmentView(tasks, members, groupId) {
                                                     Tugas diselesaikan pada: ${formatDateFull(t.completed_at)}
                                                 </p>
                                                 <div class="d-flex gap-sm">
-                                                    <a href="http://localhost:5000/uploads/${t.proof_file}" target="_blank" class="btn btn-sm btn-secondary text-center flex-grow" style="text-decoration: none;">
+                                                    <a href="${BASE_URL}/uploads/${t.proof_file}" target="_blank" class="btn btn-sm btn-secondary text-center flex-grow" style="text-decoration: none;">
                                                         📄 Lihat PDF
                                                     </a>
                                                     ${isOwner ? `<button class="btn btn-sm btn-danger" onclick="window.cancelDone(${t.id}, ${groupId})" title="Batalkan & Revisi">✖ Batal</button>` : ''}
@@ -448,7 +456,7 @@ function renderAssignmentView(tasks, members, groupId) {
                                 </div>
                             </div>`;
 
-                        }).join('')}
+            }).join('')}
                     </div>
                 </div>
             `;
@@ -524,20 +532,21 @@ window.cancelDone = async (taskId, groupId) => {
 window.submitWithProof = async (taskId, groupId) => {
     const fileInput = document.getElementById(`proof-${taskId}`);
     if (!fileInput.files[0]) return alert('Harap pilih file PDF bukti tugas');
-    
+
     const formData = new FormData();
     formData.append('status', 2);
     formData.append('proof', fileInput.files[0]);
-    
+
     try {
-        await apiCall(`/tasks/${taskId}/status`, 'PUT', formData, true);
+        await apiCall(`/tasks/${taskId}/status`, 'POST', formData, true);
         initKanban(groupId);
     } catch (err) { showToast(err.message, 'error'); }
 };
 
+
 async function initActivities(groupId) {
     document.getElementById('back-kanban-log').onclick = () => navigate('kanban', { groupId });
-    
+
     // Check if admin to show clear button
     const members = await apiCall(`/groups/${groupId}/members`);
     const isAdmin = members.find(m => m.id === currentUser.id)?.is_admin == 1;
