@@ -33,13 +33,14 @@ PERLU DIINGAT: Bahwa website ini yang menjadi admin adalah pengguna yang membuat
 *   **Database**: MySQL.
 *   **Storage**: Online/Local File Storage (for PDF proofs).
 
-## Pengujian Aspek Kualitas (Quality Testing)
-Berdasarkan hasil pengujian fungsionalitas dan desain pada Daily Project 7:
+## 📋 Daftar Fitur & Status Fungsionalitas
+Berikut adalah daftar fitur utama yang telah diimplementasikan dan hasil pengujian fungsionalitasnya:
 
-| Aspek Kualitas | Deskripsi Pengujian | Hasil | Status |
-| :--- | :--- | :--- | :--- |
-| **Functionality** | Menguji fitur login, pendaftaran, pembuatan grup, dan manajemen tugas. | Semua fitur berjalan sesuai logika bisnis yang dirancang. | ✅ PASS |
-| **Usability** | Menguji kemudahan navigasi dan estetika antarmuka (UI/UX). | Desain Glassmorphism intuitif dan memudahkan pengguna dalam memantau tugas. | ✅ PASS |
-| **Reliability** | Menguji keakuratan log aktivitas realtime dan perhitungan deadline. | Log diperbarui secara otomatis dan skor ketepatan waktu terhitung presisi. | ✅ PASS |
-| **Security** | Menguji proteksi halaman (Auth Guard) dan hak akses Admin. | Pengguna tanpa login tidak bisa mengakses workspace; fitur admin terproteksi. | ✅ PASS |
-| **Performance** | Menguji kecepatan pemuatan data dan responsivitas aplikasi. | Aplikasi berjalan ringan dengan transisi antar halaman yang mulus. | ✅ PASS |
+| Fitur | Deskripsi | Status |
+| :--- | :--- | :--- |
+| **Autentikasi** | Login dan Register Mahasiswa menggunakan NIM sebagai identitas unik. | ✅ PASS |
+| **Workspace Management** | Membuat grup baru (Admin) atau bergabung ke grup via kode unik. | ✅ PASS |
+| **Kanban Board** | Manajemen tugas dengan 4 stage: To Do, In Progress, Review, dan Done. | ✅ PASS |
+| **Evidence Upload** | Fitur unggah bukti pengerjaan berupa file PDF pada tugas yang selesai. | ✅ PASS |
+| **Activity Logging** | Pencatatan otomatis setiap aksi user (log) untuk transparansi tim. | ✅ PASS |
+| **Performance Report** | Laporan statistik kinerja anggota berdasarkan ketepatan waktu (deadline). | ✅ PASS |
