@@ -4,21 +4,22 @@
 
 ---
 
-## 🚀 Live Demo & Akses Percobaan
+## Live Demo & Akses Percobaan
 Website: [http://korabo.great-site.net](http://korabo.great-site.net)
 
-### **🔑 Akun Percobaan (Untuk Dosen/Penguji)**
+### ** Akun Percobaan (Untuk Dosen/Penguji)**
 Gunakan akun berikut untuk mencoba fitur kolaborasi tanpa perlu mendaftar:
+PERLU DIINGAT: Bahwa website ini yang menjadi admin adalah pengguna yang membuat grup itu PERTAMA KALI
 
 | Role | NIM | Password |
 | :--- | :--- | :--- |
-| **User 1 (Admin/Ketua)** | `20230001` | `dhio` |
+| **User 1 (Anggota)** | `20230001` | `dhio` |
 | **User 2 (Anggota)** | `20230002` | `student1` |
 | **User 3 (Anggota)** | `20230003` | `student2` |
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 *   **Modern Kanban Workspace**: Pengorganisasian tugas per anggota kelompok dengan sistem accordion yang rapi.
 *   **Strict Admin Control**: Hanya admin yang memiliki otoritas penuh untuk manajemen tugas dan grup.
 *   **Real-time Activity Log**: Pencatatan setiap aksi dalam grup secara otomatis dan real-time.
@@ -26,13 +27,13 @@ Gunakan akun berikut untuk mencoba fitur kolaborasi tanpa perlu mendaftar:
 *   **PDF Proof System**: Kewajiban unggah bukti pengerjaan berupa file PDF untuk transparansi hasil kerja.
 *   **Earthy Autumn Design**: Antarmuka estetik dengan gaya Glassmorphism yang responsif.
 
-## 🛠 Tech Stack
+## Tech Stack
 *   **Frontend**: Vite, Vanilla JavaScript, CSS3 (Modern UI).
 *   **Backend**: PHP (Migrated for Deployment).
 *   **Database**: MySQL.
 *   **Storage**: Online/Local File Storage (for PDF proofs).
 
-## 📋 Pengujian Aspek Kualitas (Quality Testing)
+## Pengujian Aspek Kualitas (Quality Testing)
 Berdasarkan hasil pengujian fungsionalitas dan desain pada Daily Project 7:
 
 | Aspek Kualitas | Deskripsi Pengujian | Hasil | Status |
