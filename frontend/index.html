@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>korabo | Platform Kolaborasi Mahasiswa</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="modal-container" class="modal-overlay hidden">
+            <!-- Dynamic Modal Content -->
+        </div>
+
+        <div id="toast-container" class="toast-container"></div>
+
+
+        <!-- Navigation (Hidden when logic requires) -->
+        <nav id="navbar" class="hidden">
+            <div class="nav-content">
+                <span class="nav-brand">korabo</span>
+                <div class="nav-actions">
+                    <span id="user-display" style="margin-right: 1.5rem;"></span>
+                    <button id="logout-btn" class="btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <!-- Dynamic Content Injected Here -->
+        </main>
+    </div>
+
+    <!-- Templates for Views -->
+    <template id="tpl-login">
+        <div class="auth-container">
+            <div class="logo"><h1>korabo</h1><p>Welcome back, Student.</p></div>
+            <div class="glass-card p-xl">
+                <form id="login-form">
+                    <div class="input-group">
+                        <label>NIM</label>
+                        <input type="text" id="login-nim" placeholder="Masukkan NIM" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="login-pass" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Sign In</button>
+                </form>
+                <p class="text-center mt-lg text-muted">Belum punya akun? <a href="#" id="go-register">Daftar</a></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-register">
+        <div class="auth-container">
+            <div class="logo"><h1>korabo</h1><p>Create your profile.</p></div>
+            <div class="glass-card p-xl">
+                <form id="register-form">
+                    <div class="input-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="reg-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group">
+                        <label>NIM</label>
+                        <input type="text" id="reg-nim" placeholder="20210001" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="reg-email" placeholder="john@student.ac.id" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-pass" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Create Account</button>
+                </form>
+                <p class="text-center mt-lg text-muted">Sudah punya akun? <a href="#" id="go-login">Login</a></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-dashboard">
+        <div class="dashboard-wrap p-xl">
+            <header class="d-flex justify-between align-center mb-xl">
+                <div>
+                    <h2>Workspace Kamu</h2>
+                    <p class="text-muted">Pilih grup untuk mulai bekerja</p>
+                </div>
+                <div class="d-flex gap-md">
+                    <button id="show-join-modal" class="btn">Gabung Grup</button>
+                    <button id="show-create-modal" class="btn btn-primary">Buat Grup Baru</button>
+                </div>
+            </header>
+            
+            <div id="group-list" class="grid-3 gap-lg">
+                <!-- Group cards injected here -->
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-kanban">
+        <div class="workspace-header p-lg glass-card mx-lg mt-lg">
+            <div class="d-flex justify-between align-center">
+                <div>
+                    <h2 id="group-name-display">Loading...</h2>
+                    <p id="group-code-display" class="text-muted"></p>
+                </div>
+                <div class="d-flex gap-md">
+                    <button id="show-task-modal" class="btn btn-primary">Tambah Tugas</button>
+                    <button class="btn btn-secondary" id="show-activity-btn">📜 Log Aktivitas</button>
+                    <button id="export-report-btn" class="btn">📊 Laporan</button>
+                    <button id="back-dash" class="btn">Kembali</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="workspace-body">
+            <div class="kanban-board" id="kanban-board-container">
+                <!-- Status Sections will be injected here -->
+            </div>
+
+            <aside class="members-sidebar glass-card p-lg">
+                <h3 class="mb-lg">Anggota Kelompok</h3>
+                <div id="members-list">
+                    <!-- Members injected here -->
+                </div>
+            </aside>
+        </div>
+    </template>
+
+    <template id="tpl-activities">
+        <div class="workspace-header d-flex justify-between align-center">
+            <h2>📜 Log Aktivitas Grup</h2>
+            <div class="d-flex gap-md">
+                <button class="btn btn-sm btn-danger hidden" id="clear-activity-btn">🗑 Bersihkan Log</button>
+                <button class="btn btn-sm btn-secondary" id="back-kanban-log">Kembali</button>
+            </div>
+        </div>
+        <div class="glass-card p-xl mt-lg">
+            <div id="activities-list" class="d-flex flex-column gap-md">
+                <!-- Activities injected here -->
+            </div>
+        </div>
+    </template>
+
+
+    <template id="tpl-report">
+        <div class="p-xl">
+            <header class="d-flex justify-between align-center mb-xl">
+                <h2>Laporan Kinerja Kelompok</h2>
+                <button id="back-kanban-report" class="btn">Kembali</button>
+            </header>
+            <div class="glass-card p-xl">
+                <table style="width: 100%; border-collapse: collapse; color: white;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border); text-align: left;">
+                            <th style="padding: 1rem;">Nama</th>
+                            <th style="padding: 1rem;">NIM</th>
+                            <th style="padding: 1rem; text-align: center;">Tugas Selesai</th>
+                            <th style="padding: 1rem; text-align: center;">Ketepatan Waktu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-body">
+                        <!-- Rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-modal-add-group">
+        <div class="glass-card p-xl" style="max-width: 400px; width: 90%;">
+            <h2 class="mb-lg">Buat Grup Baru</h2>
+            <form id="add-group-form">
+                <div class="input-group">
+                    <label>Nama Grup</label>
+                    <input type="text" id="new-group-name" required placeholder="Contoh: Proyek Akhir Semester">
+                </div>
+                <div class="d-flex gap-md mt-lg">
+                    <button type="submit" class="btn btn-primary flex-grow">Buat Grup</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <template id="tpl-modal-add-group">
+        <div class="glass-card p-xl" style="max-width: 400px; width: 90%;">
+            <h2 class="mb-lg">Buat Grup Baru</h2>
+            <form id="add-group-form">
+                <div class="input-group">
+                    <label>Nama Grup</label>
+                    <input type="text" id="new-group-name" required placeholder="Contoh: Proyek Akhir Semester">
+                </div>
+                <div class="d-flex gap-md mt-lg">
+                    <button type="submit" class="btn btn-primary flex-grow">Buat Grup</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <template id="tpl-modal-join-group">
+        <div class="glass-card p-xl" style="max-width: 400px; width: 90%;">
+            <h2 class="mb-lg">Gabung Grup</h2>
+            <form id="join-group-form">
+                <div class="input-group">
+                    <label>Kode Grup</label>
+                    <input type="text" id="join-group-code" required placeholder="Masukkan 6 digit kode">
+                </div>
+                <div class="d-flex gap-md mt-lg">
+                    <button type="submit" class="btn btn-primary flex-grow">Gabung Sekarang</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                </div>
+            </form>
+        </div>
+    </template>
+    <template id="tpl-modal-add-task">
+        <div class="glass-card p-xl" style="max-width: 500px; width: 90%;">
+
+            <h2 class="mb-lg">Tambah Tugas Baru</h2>
+            <form id="add-task-form">
+                <div class="input-group">
+                    <label>Judul Tugas</label>
+                    <input type="text" id="task-title" required placeholder="Contoh: Membuat Desain UI">
+                </div>
+                <div class="input-group">
+                    <label>Deskripsi (Opsional)</label>
+                    <textarea id="task-desc" rows="3"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Deadline</label>
+                    <input type="datetime-local" id="task-deadline">
+                </div>
+                <div class="input-group">
+
+                    <label>Berikan Ke Anggota (Opsional)</label>
+                    <select id="task-assignee">
+                        <option value="">Belum Ditugaskan</option>
+                    </select>
+                </div>
+                <div class="d-flex gap-md mt-lg">
+                    <button type="submit" class="btn btn-primary flex-grow">Simpan Tugas</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <script type="module" src="./main.js"></script>
+
+</body>
+</html>
